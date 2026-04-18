@@ -1,30 +1,169 @@
-# Example README.md file for Coursera Projects
+# CUDA Batch Image Grayscale Processor
 
 ## Overview
 
-## Code Organization
+This project implements a GPU-accelerated batch image processing system using CUDA and NVIDIA Performance Primitives (NPP). The program processes a large number of input images and converts them into grayscale format efficiently using GPU computation.
 
-```bin/```
-This folder should hold all binary/executable code that is built automatically or manually. Executable code should have use the .exe extension or programming language-specific extension.
+The goal of this project is to demonstrate large-scale data processing using GPU acceleration instead of CPU-only approaches.
 
-```data/```
-This folder should hold all example data in any format. If the original data is rather large or can be brought in via scripts, this can be left blank in the respository, so that it doesn't require major downloads when all that is desired is the code/structure.
+---
 
-```lib/```
-Any libraries that are not installed via the Operating System-specific package manager should be placed here, so that it is easier for inclusion/linking.
+## Features
 
-```src/```
-The source code should be placed here in a hierarchical fashion, as appropriate.
+* GPU-based image processing using CUDA + NPP
+* Batch processing of multiple images in a single run
+* Command Line Interface (CLI) support
+* Logs processed files into `log.txt`
+* Uses OpenCV for image input/output
 
-```README.md```
-This file should hold the description of the project so that anyone cloning or deciding if they want to clone this repository can understand its purpose to help with their decision.
+---
 
-```INSTALL```
-This file should hold the human-readable set of instructions for installing the code so that it can be executed. If possible it should be organized around different operating systems, so that it can be done by as many people as possible with different constraints.
+## Project Structure
 
-```Makefile or CMAkeLists.txt or build.sh```
-There should be some rudimentary scripts for building your project's code in an automatic fashion.
+```
+.
+├── bin/                # compiled executable
+├── data/
+│   ├── input/          # input images (100+ images)
+│   └── output/         # output images + log.txt
+├── lib/                # reserved (unused)
+├── src/                # source code
+│   ├── main.cpp
+│   ├── image_io.cpp
+│   ├── image_io.h
+├── Makefile
+├── run.sh
+├── README.md
+```
 
-```run.sh```
-An optional script used to run your executable code, either with or without command-line arguments.
+---
 
+## Requirements
+
+* CUDA Toolkit
+* OpenCV
+* Linux environment (or WSL)
+
+### Install OpenCV (Linux)
+
+```bash
+sudo apt update
+sudo apt install libopencv-dev
+```
+
+---
+
+## Build Instructions
+
+```bash
+make
+```
+
+This will generate the executable:
+
+```
+bin/process_images
+```
+
+---
+
+## Run Instructions
+
+```bash
+./run.sh
+```
+
+OR using CLI directly:
+
+```bash
+./bin/process_images data/input data/output
+```
+
+---
+
+## Input Data
+
+* Place images in:
+
+```
+data/input/
+```
+
+* The program is designed to process **100+ images** in one execution.
+
+---
+
+## Output
+
+* Grayscale images are saved in:
+
+```
+data/output/
+```
+
+* Log file:
+
+```
+data/output/log.txt
+```
+
+Example log:
+
+```
+img_001.jpg processed
+img_002.jpg processed
+...
+img_100.jpg processed
+```
+
+---
+
+## GPU Implementation Details
+
+The project uses the NVIDIA NPP function:
+
+```
+nppiRGBToGray_8u_C3C1R
+```
+
+Processing steps:
+
+1. Load image using OpenCV
+2. Convert BGR → RGB
+3. Copy image to GPU memory
+4. Apply NPP grayscale conversion
+5. Copy result back to CPU
+6. Save output image
+
+---
+
+## Execution Proof
+
+* The program processes multiple images in a single execution
+* Log file provides evidence of batch processing
+* Output images confirm successful GPU computation
+
+---
+
+## Challenges Faced
+
+* Managing GPU memory (cudaMalloc, cudaMemcpy)
+* Linking CUDA and OpenCV correctly
+* Handling batch processing efficiently
+* Ensuring correct color format (BGR vs RGB)
+
+---
+
+## Conclusion
+
+This project demonstrates how GPU acceleration can be used to efficiently process large datasets of images. Using CUDA and NPP significantly improves performance compared to CPU-only implementations.
+
+---
+
+## Future Improvements
+
+* Add more filters (blur, edge detection)
+* Compare CPU vs GPU performance
+* Parallel batch processing (multi-image GPU streams)
+
+---

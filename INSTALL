@@ -1,0 +1,9 @@
+Requirements:
+- CUDA Toolkit
+- OpenCV (sudo apt install libopencv-dev)
+
+Build:
+make
+
+Run:
+./run.sh
